@@ -1,0 +1,1 @@
+go build -o chuantou.exe main.go
