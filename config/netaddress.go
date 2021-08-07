@@ -39,8 +39,12 @@ func ParseNetAddresses(addresses string) ([]NetAddress, bool) {
 	return result, true
 }
 
-// 解析单个网络地址
-// 支持两个端口的解析，格式如192.168.1.100:3389:13389
+/**
+ * @Description: // 解析单个网络地址 支持两个端口的解析，格式如192.168.1.100:3389:13389
+ * @param address
+ * @return NetAddress
+ * @return bool
+ */
 func ParseNetAddress(address string) (NetAddress, bool) {
 	arr := strings.Split(strings.TrimSpace(address), ":")
 	if len(arr) < 2 {

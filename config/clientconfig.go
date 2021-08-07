@@ -1,8 +1,11 @@
 package config
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/go-ini/ini"
 	"log"
+	"net"
 	"strconv"
 	"strings"
 )
@@ -71,17 +74,24 @@ func _loadClientConfig() ClientConfig {
 	if err != nil {
 		log.Fatalln("Fail to load config.ini", err.Error())
 	}
-
 	client := func(key string) *ini.Key {
 		return cfg.Section("client").Key(key)
 	}
 	args := make([]string, 4)
-
 	args[0] = client("key").String()
-	args[1] = client("server-host").String()
-	args[2] = client("local-host-mapping").String()
+	addr, _ := net.ResolveIPAddr("ip", client("server-host").String()[0:strings.Index(client("server-host").String(), ":")])
+	args[1] = addr.IP.String() + client("server-host").String()[strings.Index(client("server-host").String(), ":"):]
+	var portList []string
+	json.Unmarshal([]byte(client("local-host-mapping").String()), &portList)
+	str_mapping := ""
+	for _, _port := range portList {
+		if len(str_mapping) > 0 {
+			str_mapping += ","
+		}
+		str_mapping += fmt.Sprintf("%s", _port)
+	}
+	args[2] = str_mapping
 	args[3] = client("tunnel-count").String()
-
 	return _parseClientConfig(args)
 }
 
