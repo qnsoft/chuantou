@@ -41,15 +41,13 @@ func main() {
 	argsConfig := args[2:]
 
 	switch args[1] {
-	case "-server":
-		// 外网服务
+	case "-server": //服务器端参数启动
 		serverConfig := config.InitServerConfig(argsConfig)
 		core.Server(serverConfig)
-	case "-client":
-		// 内网服务
+	case "-client": //客户端参数启动
 		clientConfig := config.InitClientConfig(argsConfig)
 		core.Client(clientConfig)
-	case "-generate":
+	case "-generate": //生成短期 key
 		// 生成短期 key
 		var seed, expired string
 		if len(argsConfig) > 0 {
